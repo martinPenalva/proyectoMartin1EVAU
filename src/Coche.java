@@ -5,7 +5,7 @@ public class Coche {
     private int anyo;
     private double precio;
     private int kms;
-   // terminar clase
+
     public Coche(String marca, String modelo, String matricula, int anyo, double precio, int kms) {
         this.marca = marca;
         this.modelo = modelo;
@@ -15,48 +15,59 @@ public class Coche {
         this.kms = kms;
     }
 
+    public void descuento(int porcentajeDescuento) {
+        if (porcentajeDescuento < 1 || porcentajeDescuento > 50) {
+            System.out.println("ERROR: Debe especificar un valor entre 1 y 50");
+            return;
+        }
+
+        double descuento = (porcentajeDescuento / 100.0) * this.precio;
+        this.precio -= descuento;
+        System.out.println("Nuevo precio después de " + porcentajeDescuento + "% de descuento: " + this.precio + " €");
+    }
+
     public String getMarca() {
         return marca;
-    }
-
-    public String getModelo() {
-        return modelo;
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public int getAnyo() {
-        return anyo;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public int getKms() {
-        return kms;
     }
 
     public void setMarca(String marca) {
         this.marca = marca;
     }
 
+    public String getModelo() {
+        return modelo;
+    }
+
     public void setModelo(String modelo) {
         this.modelo = modelo;
+    }
+
+    public String getMatricula() {
+        return matricula;
     }
 
     public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
 
+    public int getAnyo() {
+        return anyo;
+    }
+
     public void setAnyo(int anyo) {
         this.anyo = anyo;
     }
 
+    public double getPrecio() {
+        return precio;
+    }
+
     public void setPrecio(double precio) {
         this.precio = precio;
+    }
+
+    public int getKms() {
+        return kms;
     }
 
     public void setKms(int kms) {

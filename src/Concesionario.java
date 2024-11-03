@@ -20,7 +20,7 @@ public class Concesionario {
             System.out.println("Concesionario lleno, no se puede introducir el coche.");
         }
     }
-   //modificar bucle
+
     public void venderCoche(String matricula) {
         Coche cocheAVender = null;
         for (Coche coche : listadoCoches) {
@@ -42,5 +42,10 @@ public class Concesionario {
     public double getFacturacionLocal() {
         return facturacionLocal;
     }
+
+    public List<Coche> getListadoCoches() {
+        return listadoCoches;
+    }
+
 
 }
