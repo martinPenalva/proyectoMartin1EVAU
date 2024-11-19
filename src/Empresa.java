@@ -3,7 +3,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Empresa {
     private String nombre;
@@ -22,9 +21,18 @@ public class Empresa {
         System.out.print("Introduzca el tamaño máximo de coches: ");
         int tamanyoMaximo = scanner.nextInt();
         scanner.nextLine();
+
         if (!grupo.containsKey(nombreSede)) {
-            Concesionario nuevoConcesionario = new Concesionario(tamanyoMaximo);
-            grupo.put(nombreSede, nuevoConcesionario);
+            grupo.put(nombreSede, new Concesionario(tamanyoMaximo));
+            System.out.println("Sede " + nombreSede + " creada con éxito.");
+        } else {
+            System.out.println("La sede " + nombreSede + " ya existe.");
+        }
+    }
+
+    public void crearSede(String nombreSede, int tamanyoMaximo) {
+        if (!grupo.containsKey(nombreSede)) {
+            grupo.put(nombreSede, new Concesionario(tamanyoMaximo));
             System.out.println("Sede " + nombreSede + " creada con éxito.");
         } else {
             System.out.println("La sede " + nombreSede + " ya existe.");
@@ -59,9 +67,9 @@ public class Empresa {
     public void venderCoche(Scanner scanner) {
         System.out.print("Introduzca la matrícula del coche a vender: ");
         String matricula = scanner.nextLine();
-
         System.out.print("Introduzca la sede en la que se realizó la venta: ");
         String sede = scanner.nextLine();
+
         Concesionario concesionario = grupo.get(sede);
         if (concesionario != null) {
             concesionario.venderCoche(matricula);
@@ -90,7 +98,6 @@ public class Empresa {
             System.out.println(cochesEncontrados.size() + " coincidencias en " + nombreSede + ":");
             for (Coche coche : cochesEncontrados) {
                 System.out.println(coche);
-                System.out.println("-------------------------------------------------------------------------------------");
             }
         }
     }
@@ -115,7 +122,6 @@ public class Empresa {
             System.out.println(cochesEncontrados.size() + " coincidencias en " + nombreSede + ":");
             for (Coche coche : cochesEncontrados) {
                 System.out.println(coche);
-                System.out.println("-------------------------------------------------------------------------------------");
             }
         }
     }
@@ -129,37 +135,36 @@ public class Empresa {
             System.out.println("Listado de coches en el concesionario " + nombreSede + ":");
             for (Coche coche : concesionario.getListadoCoches()) {
                 System.out.println(coche);
-                System.out.println("-------------------------------------------------------------------------------------");
             }
         } else {
             System.out.println("No se encontró la sede especificada.");
         }
     }
 
-    public static void cargarDatosIniciales(Empresa empresa) {
-        Random random = new Random();
-        String[] marcas = {"Toyota", "Audi", "Ford", "BMW", "Honda"};
-        String[] modelos = {"Auris", "A3", "Focus", "X5", "Civic"};
-        String[] matrículas = {"2465JHN", "4386TGH", "1234ABC", "5678DEF", "9876XYZ"};
-        int[] años = {2019, 2020, 2021, 2022, 2023};
-        double[] precios = {12000, 16000, 20000, 18000, 15000};
-        int[] kms = {50000, 60000, 70000, 80000, 90000};
+    public Concesionario getConcesionario(String nombreSede) {
+        return grupo.get(nombreSede);
+    }
 
-        empresa.crearSede(new Scanner(System.in));
-        empresa.crearSede(new Scanner(System.in));
-        empresa.crearSede(new Scanner(System.in));
-
-        for (Map.Entry<String, Concesionario> entry : empresa.grupo.entrySet()) {
-            Concesionario concesionario = entry.getValue();
-            for (int i = 0; i < 5; i++) {
-                String marca = marcas[random.nextInt(marcas.length)];
-                String modelo = modelos[random.nextInt(modelos.length)];
-                String matricula = matrículas[random.nextInt(matrículas.length)];
-                int año = años[random.nextInt(años.length)];
-                double precio = precios[random.nextInt(precios.length)];
-                int km = kms[random.nextInt(kms.length)];
-                concesionario.adquirirCoche(new Coche(marca, modelo, matricula, año, precio, km));
-            }
+    public void calcularFacturacionTotal() {
+        facturacionEmpresa = 0;
+        for (Concesionario concesionario : grupo.values()) {
+            facturacionEmpresa += concesionario.getFacturacionLocal();
         }
+        System.out.println("La facturación total de la empresa es: " + facturacionEmpresa);
+    }
+
+    public static void cargarDatosIniciales(Empresa empresa) {
+        empresa.crearSede("Madrid", 7);
+        empresa.crearSede("Barcelona", 6);
+        empresa.crearSede("Valencia", 8);
+
+        empresa.getConcesionario("Madrid").adquirirCoche(new Coche("Toyota", "Corolla", "1234ABC", 2015, 12000, 80000));
+        empresa.getConcesionario("Madrid").adquirirCoche(new Coche("Honda", "Civic", "5678DEF", 2018, 14000, 60000));
+        empresa.getConcesionario("Barcelona").adquirirCoche(new Coche("Ford", "Fiesta", "4321GHI", 2017, 10000, 50000));
+        empresa.getConcesionario("Barcelona").adquirirCoche(new Coche("BMW", "Serie 3", "8765JKL", 2020, 25000, 30000));
+        empresa.getConcesionario("Valencia").adquirirCoche(new Coche("Audi", "A4", "1122MNO", 2016, 22000, 70000));
+        empresa.getConcesionario("Valencia").adquirirCoche(new Coche("Mercedes", "Clase C", "3344PQR", 2019, 27000, 45000));
+
+        System.out.println("Datos iniciales cargados correctamente.");
     }
 }
